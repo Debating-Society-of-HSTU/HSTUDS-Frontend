@@ -102,6 +102,40 @@
     @apply ring-2 ring-info-light dark:ring-info shadow-lg bg-white/80 dark:bg-black/50;
   }
 
+  /* Homepage — editorial / cinematic helpers */
+  .hero-outline {
+    color: transparent;
+    -webkit-text-stroke: 1.5px rgba(148, 163, 184, 0.35);
+  }
+  .hero-outline-sm {
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.6);
+  }
+  .hero-grid {
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.6) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.6) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, #000 30%, transparent 75%);
+  }
+  .section-tag {
+    font-family: var(--font-space-grotesk), monospace;
+    @apply text-xs uppercase tracking-[0.25em] text-secondary-light dark:text-secondary;
+  }
+  .spotlight-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s;
+    background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), rgba(96, 165, 250, 0.18), transparent 45%);
+  }
+  .spotlight-card:hover::before {
+    opacity: 1;
+  }
+
   @keyframes marquee {
     0% {
       transform: translateX(0%);

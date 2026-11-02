@@ -67,6 +67,8 @@ export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
   const [searchOpen, setSearchOpen] = React.useState(false);
   const pathname = usePathname();
+  // The homepage hero is always dark, so the bar goes light-on-dark until you scroll past it
+  const onDarkHero = pathname === '/' && !isScrolled && !mobileMenuOpen;
 
   React.useEffect(() => {
     const handleScroll = () => {
@@ -95,7 +97,8 @@ export function Navbar() {
       transition={{ type: 'spring', stiffness: 300, damping: 30 }}
       className={cn(
         'fixed top-0 left-0 right-0 z-50 transition-all duration-300 rounded-b-2xl',
-        isScrolled ? 'glass-nav py-3' : 'bg-transparent py-5'
+        isScrolled ? 'glass-nav py-3' : 'bg-transparent py-5',
+        onDarkHero && 'text-white'
       )}
     >
       <div className="container mx-auto px-6 max-w-7xl flex items-center justify-between">
@@ -126,13 +129,13 @@ export function Navbar() {
                   href={link.href}
                   className={cn(
                     'font-medium text-sm transition-colors hover:text-info-light flex items-center gap-1',
-                    pathname === link.href ? 'text-info-light' : 'text-primary-light/80 dark:text-primary/80'
+                    pathname === link.href ? (onDarkHero ? 'text-white' : 'text-info-light') : onDarkHero ? 'text-white/75' : 'text-primary-light/80 dark:text-primary/80'
                   )}
                 >
                   {link.label}
                 </Link>
               ) : (
-                <button className="font-medium text-sm transition-colors hover:text-info-light text-primary-light/80 dark:text-primary/80 flex items-center gap-1">
+                <button className={cn('font-medium text-sm transition-colors hover:text-info-light flex items-center gap-1', onDarkHero ? 'text-white/75 hover:text-white' : 'text-primary-light/80 dark:text-primary/80')}>
                   {link.label}
                   <ChevronDown className="w-4 h-4 opacity-50 group-hover:rotate-180 transition-transform duration-300" />
                 </button>
@@ -141,7 +144,7 @@ export function Navbar() {
               {/* Dropdown */}
               {link.children && (
                 <div className="absolute top-full left-0 pt-4 opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-300">
-                  <div className="bg-white/95 dark:bg-[#141923]/95 backdrop-blur-xl border border-black/10 dark:border-white/10 shadow-xl rounded-2xl rounded-tr-none rounded-tl-none p-2 min-w-[200px] flex flex-col gap-1">
+                  <div className="text-primary-light dark:text-primary bg-white/95 dark:bg-[#141923]/95 backdrop-blur-xl border border-black/10 dark:border-white/10 shadow-xl rounded-2xl rounded-tr-none rounded-tl-none p-2 min-w-[200px] flex flex-col gap-1">
                     {link.children.map((child: any, cIdx) => {
                       if (child.subChildren) {
                         return (
@@ -151,7 +154,7 @@ export function Navbar() {
                               <ChevronDown className="w-3 h-3 -rotate-90" />
                             </button>
                             <div className="absolute top-0 left-full pl-2 opacity-0 -translate-x-2 pointer-events-none group-hover/sub:opacity-100 group-hover/sub:translate-x-0 group-hover/sub:pointer-events-auto transition-all duration-300">
-                              <div className="bg-white/95 dark:bg-[#141923]/95 backdrop-blur-xl border border-black/10 dark:border-white/10 shadow-xl rounded-2xl p-2 min-w-[180px] flex flex-col gap-1">
+                              <div className="text-primary-light dark:text-primary bg-white/95 dark:bg-[#141923]/95 backdrop-blur-xl border border-black/10 dark:border-white/10 shadow-xl rounded-2xl p-2 min-w-[180px] flex flex-col gap-1">
                                 {child.subChildren.map((sub: any, sIdx: number) => (
                                   <Link
                                     key={sIdx}
@@ -193,7 +196,8 @@ export function Navbar() {
           <ThemeToggle />
           <button 
             onClick={() => setSearchOpen(true)}
-            className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
+            className={cn('w-10 h-10 rounded-full flex items-center justify-center transition-colors', onDarkHero ? 'hover:bg-white/10' : 'hover:bg-black/5 dark:hover:bg-white/10')}
+            aria-label="Search"
           >
             <Search className="w-5 h-5" />
           </button>
